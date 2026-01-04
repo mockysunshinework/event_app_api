@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  event: one
+  status: 1
+  applied_at: 2025-12-29 20:06:12
+  canceled_at: 2025-12-29 20:06:12
+
+two:
+  user: two
+  event: two
+  status: 1
+  applied_at: 2025-12-29 20:06:12
+  canceled_at: 2025-12-29 20:06:12
