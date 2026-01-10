@@ -50,44 +50,20 @@ RSpec.describe "Api::V1::Me::EventApplications", type: :request do
   let(:headers) {
     { 'X-User-Id' => user.id.to_s }
   }
-  describe "GET /api/v1/me/event_applications" do
-    it 'returns 200' do
-      get '/api/v1/me/event_applications', headers: headers
-      expect(response.status).to eq(200)
-    end
-
-    it 'returns 401 when unaauthorized' do
-      get '/api/v1/me/event_applications'
+  describe "PATCH /api/v1/me/event_applications/:id/cancel" do
+    it 'returns 401' do
+      patch "/api/v1/me/event_applications/#{event_application_1.id}/cancel"
       expect(response.status).to eq(401)
     end
 
-    it 'returns applications with event data' do
-      get '/api/v1/me/event_applications', headers: headers
-
-      body = JSON.parse(response.body)
-
-      expect(body.length).to eq(2)
-      expect(body).to all(have_key('event'))
+    it "does not cancel other user's applications" do
+      patch "/api/v1/me/event_applications/#{other_application.id}/cancel", headers: headers
+      expect(response.status).to eq(404)
     end
 
-    it 'filters applications by status=pending' do
-      get '/api/v1/me/event_applications', headers: headers, params: {status: 'pending' }
-
-      body = JSON.parse(response.body)
-
-      expect(response.status).to eq(200)
-      expect(body.length).to eq(1)
-      expect(body.first).to have_key('status')
-      expect(body.first['status']).to eq('pending')
-    end
-
-    it "does not include other user's applications" do
-      get '/api/v1/me/event_applications', headers: headers
-
-      body = JSON.parse(response.body)
-      ids = body.map { |h| h['id'] }
-
-      expect(ids).not_to include(other_application.id)
+    it "does not re-cancel own applications" do
+      patch "/api/v1/me/event_applications/#{event_application_2.id}/cancel", headers: headers
+      expect(response.status).to eq(409)
     end
   end
 end
