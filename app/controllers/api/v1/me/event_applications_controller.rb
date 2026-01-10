@@ -2,12 +2,12 @@ module Api
   module V1
     module Me
       class EventApplicationsController < ApplicationController
+        before_action :authenticate_user!
         def index
-          current_user = User.first
-          applications = current_user.
-            event_applications.
-            includes(:event).
-            order(created_at: :desc)
+          applications =
+            current_user.event_applications
+                        .includes(:event)
+                        .order(created_at: :desc)
 
           if params[:status].present? && EventApplication.statuses.key?(params[:status]) == false
             return render json: {
@@ -30,7 +30,6 @@ module Api
         end
 
         def cancel
-          current_user = User.last
           application = current_user.event_applications.find_by(id: params[:id])
           return render json: { error: 'Not found' }, status: :not_found if application.nil?
 
