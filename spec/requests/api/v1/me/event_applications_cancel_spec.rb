@@ -51,19 +51,38 @@ RSpec.describe "Api::V1::Me::EventApplications", type: :request do
     { 'X-User-Id' => user.id.to_s }
   }
   describe "PATCH /api/v1/me/event_applications/:id/cancel" do
-    it 'returns 401' do
-      patch "/api/v1/me/event_applications/#{event_application_1.id}/cancel"
-      expect(response.status).to eq(401)
+    context '異常系' do
+      it 'returns 401 when not authorized' do
+        patch "/api/v1/me/event_applications/#{event_application_1.id}/cancel"
+        expect(response.status).to eq(401)
+      end
+
+      it "does not cancel other user's applications" do
+        patch "/api/v1/me/event_applications/#{other_application.id}/cancel", headers: headers
+        expect(response.status).to eq(404)
+      end
+
+      it "does not re-cancel own applications" do
+        patch "/api/v1/me/event_applications/#{event_application_2.id}/cancel", headers: headers
+        expect(response.status).to eq(409)
+      end
     end
 
-    it "does not cancel other user's applications" do
-      patch "/api/v1/me/event_applications/#{other_application.id}/cancel", headers: headers
-      expect(response.status).to eq(404)
-    end
+    context '正常系' do
+      it 'return 200 and cancels the application' do
+        patch "/api/v1/me/event_applications/#{event_application_1.id}/cancel", headers: headers
+        expect(response.status).to eq(200)
 
-    it "does not re-cancel own applications" do
-      patch "/api/v1/me/event_applications/#{event_application_2.id}/cancel", headers: headers
-      expect(response.status).to eq(409)
+        body = JSON.parse(response.body)
+
+        expect(body["status"]).to eq("canceled")
+        expect(body["canceled_at"]).to be_present
+
+        event_application_1.reload
+
+        expect(event_application_1.status).to eq('canceled')
+        expect(event_application_1.canceled_at).to be_present
+      end
     end
   end
 end

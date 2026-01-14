@@ -44,6 +44,11 @@ RSpec.describe "Api::V1::EventApplications", type: :request do
 
         expect(body['error']).to eq("Already exists")
       end
+
+      it "return 401 when X-User-Id is not exited" do
+        post "/api/v1/events/#{event_1.id}/event_applications", headers: { 'X-User-Id' => '99999' }
+        expect(response.status).to eq(401)
+      end
     end
 
     context '正常系' do
