@@ -89,5 +89,21 @@ RSpec.describe "Api::V1::Me::EventApplications", type: :request do
 
       expect(ids).not_to include(other_application.id)
     end
+
+    it "return 401 when X-UserId is not existed" do
+      get '/api/v1/me/event_applications', headers: { 'X-User-Id' => '99999' }
+      expect(response.status).to eq(401)
+
+      body = JSON.parse(response.body)
+      expect(body['error']).to eq('Unauthorized')
+    end
+
+    it "return 401 when X-User-Id is invalid format" do
+      get '/api/v1/me/event_applications', headers: { 'X-User-Id' => 'abc' }
+      expect(response.status).to eq(401)
+
+      body = JSON.parse(response.body)
+      expect(body['error']).to eq('Unauthorized')
+    end
   end
 end
