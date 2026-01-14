@@ -4,11 +4,17 @@ class ApplicationController < ActionController::API
   def current_user
     return @current_user if defined?(@current_user)
 
-    user_id = request.headers['X-User-Id']
-    @current_user = user_id.present? ? User.find_by(id: user_id) : nil
+    raw = request.headers['X-User-Id']
+
+    return @current_user = nil if raw.blank?
+    return @current_user = nil if !raw.to_s.match?(/\A\d+\z/)
+
+    @current_user = User.find_by(id: raw.to_i)
   end
 
   def authenticate_user!
+    return if current_user.present?
+
     render json: { error: 'Unauthorized'}, status: :unauthorized if current_user.nil?
   end
 end

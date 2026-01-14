@@ -1,8 +1,9 @@
 module Api
   module V1
     class EventApplicationsController < ApplicationController
+      before_action :authenticate_user!
+
       def create
-        current_user = User.first
         event = Event.find_by(id: params[:event_id])
         return render json: { error: "Event not found" }, status: :not_found if event.nil?
 
