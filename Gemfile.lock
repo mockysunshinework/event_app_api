@@ -120,7 +120,6 @@ GEM
       net-smtp
     marcel (1.1.0)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.9)
     minitest (5.26.1)
     msgpack (1.8.0)
     mutex_m (0.3.0)
@@ -140,6 +139,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.17.2-x86_64-linux)
       racc (~> 1.4)
+    pg (1.6.0-arm64-darwin)
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
@@ -213,8 +213,6 @@ GEM
       rspec-support (~> 3.13)
     rspec-support (3.13.6)
     securerandom (0.3.2)
-    sqlite3 (2.0.4)
-      mini_portile2 (~> 2.8.0)
     stringio (3.2.0)
     thor (1.4.0)
     timeout (0.6.0)
@@ -235,10 +233,10 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   debug
+  pg
   puma (>= 5.0)
   rails (~> 7.1.5, >= 7.1.5.1)
   rspec-rails
-  sqlite3 (>= 1.4)
   tzinfo-data
 
 RUBY VERSION

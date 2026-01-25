@@ -65,6 +65,12 @@ RSpec.describe "Api::V1::EventApplications", type: :request do
         expect(body).to have_key('event')
         expect(body['event']['id']).to eq(event_1.id)
       end
+
+      it "creates a new EventApplication record" do
+        expect {
+          post "/api/v1/events/#{event_1.id}/event_applications", headers: headers
+        }.to change { EventApplication.count }.by(1)
+      end
     end
   end
 end
