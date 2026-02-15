@@ -12,6 +12,12 @@ Event.create!(
   location: "オンライン"
 )
 
+Event.create!(
+  title: "子育て研修",
+  starts_at: Time.zone.parse("2026-01-25 10:00"),
+  location: "オンライン"
+)
+
 User.destroy_all
 EventApplication.destroy_all
 
