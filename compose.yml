@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: event_app_api_development
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  web:
+    build: .
+    command: bash -lc "bin/rails db:prepare && bin/rails s -b 0.0.0.0 -p 3000"
+    environment:
+      RAILS_ENV: development
+      DATABASE_URL: postgres://postgres:postgres@db:5432/event_app_api_development
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    volumes:
+      - .:/rails
+
+volumes:
+  pgdata:
