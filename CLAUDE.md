@@ -68,8 +68,11 @@
 ---
 
 ## 認証ルール
-- 現在の認証は暫定的に `X-User-Id` ヘッダを利用する
-- `X-User-Id` が未指定・不正・該当ユーザーなしの場合は `401 Unauthorized` を返す
+- 認証は `devise` + `devise-jwt` による JWT トークン方式を採用
+- ログイン時にレスポンスの `Authorization` ヘッダで JWT トークンを返却
+- 認証が必要なリクエストでは `Authorization: Bearer <token>` ヘッダを付与する
+- トークン未指定・無効・期限切れの場合は `401 Unauthorized` を返す
+- ログアウト時は JWT を denylist テーブルに登録して無効化する
 
 ---
 
