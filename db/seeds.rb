@@ -21,8 +21,8 @@ Event.create!(
 User.destroy_all
 EventApplication.destroy_all
 
-u1 = User.create!(name: '田中 太郎', email: 'tanakataro@example.com')
-u2 = User.create!(name: '山田 花子', email: 'yamadahanako@example.com')
+u1 = User.create!(name: '田中 太郎', email: 'tanakataro@example.com', password: 'password123')
+u2 = User.create!(name: '山田 花子', email: 'yamadahanako@example.com', password: 'password123')
 
 e1 = Event.first
 e2 = Event.second

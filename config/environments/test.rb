@@ -34,6 +34,10 @@ Rails.application.configure do
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
 
+  # Allow any host in test environment (Devise controllers use ActionController::Base
+  # which enforces Host Authorization, unlike ActionController::API)
+  config.hosts.clear
+
   # Store uploaded files on the local file system in a temporary directory.
   config.active_storage.service = :test
 

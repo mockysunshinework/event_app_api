@@ -7,6 +7,19 @@ module Api
         event = Event.find_by(id: params[:event_id])
         return render json: { error: "Event not found" }, status: :not_found if event.nil?
 
+        existing = EventApplication.find_by(user: current_user, event: event, status: :canceled)
+        if existing
+          existing.update!(status: :pending, applied_at: Time.zone.now, canceled_at: nil)
+          return render json: existing.as_json(
+            only: %i[id status applied_at canceled_at],
+            include: {
+              event: {
+                only: %i[id title starts_at location]
+              }
+            }
+          ), status: :created
+        end
+
         application = EventApplication.new(
           user: current_user,
           event: event,

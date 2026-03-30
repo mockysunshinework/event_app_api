@@ -28,5 +28,11 @@ module EventAppApi
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # Devise/Warden requires session middleware even in API-only mode.
+    # The session is not used for authentication (JWT handles that),
+    # but Warden needs it to function.
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore
   end
 end

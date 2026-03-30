@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe "Api::V1::Me::EventApplications", type: :request do
-  let!(:user) { User.create!(name: 'test_user1', email: 'test_email1@email.com') }
-  let!(:other_user) { User.create!(name: 'test_user2', email: 'test_email2@email.com') }
+  let!(:user) { User.create!(name: 'test_user1', email: 'test_email1@email.com', password: 'password123') }
+  let!(:other_user) { User.create!(name: 'test_user2', email: 'test_email2@email.com', password: 'password123') }
 
   let!(:event_1) {
     Event.create!(
@@ -47,9 +47,8 @@ RSpec.describe "Api::V1::Me::EventApplications", type: :request do
     )
   }
 
-  let(:headers) {
-    { 'X-User-Id' => user.id.to_s }
-  }
+  let(:headers) { auth_headers_for(user) }
+
   describe "PATCH /api/v1/me/event_applications/:id/cancel" do
     context '異常系' do
       it 'returns 401 when not authorized' do
