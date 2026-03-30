@@ -6,6 +6,8 @@ ruby "3.3.10"
 gem "rails", "~> 7.1.5", ">= 7.1.5.1"
 
 gem "pg"
+gem "devise"
+gem "devise-jwt"
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
@@ -32,7 +34,7 @@ gem "bootsnap", require: false
 # gem "image_processing", "~> 1.2"
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
-# gem "rack-cors"
+gem "rack-cors"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri mswin mswin64 mingw x64_mingw ]

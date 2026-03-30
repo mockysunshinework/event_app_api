@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe "Api::V1::Me::EventApplications", type: :request do
-  let!(:user) { User.create!(name: 'test_user1', email: 'test_email1@email.com') }
-  let!(:other_user) { User.create!(name: 'test_user2', email: 'test_email2@email.com') }
+  let!(:user) { User.create!(name: 'test_user1', email: 'test_email1@email.com', password: 'password123') }
+  let!(:other_user) { User.create!(name: 'test_user2', email: 'test_email2@email.com', password: 'password123') }
 
   let!(:event_1) {
     Event.create!(
@@ -47,16 +47,15 @@ RSpec.describe "Api::V1::Me::EventApplications", type: :request do
     )
   }
 
-  let(:headers) {
-    { 'X-User-Id' => user.id.to_s }
-  }
+  let(:headers) { auth_headers_for(user) }
+
   describe "GET /api/v1/me/event_applications" do
     it 'returns 200' do
       get '/api/v1/me/event_applications', headers: headers
       expect(response.status).to eq(200)
     end
 
-    it 'returns 401 when unaauthorized' do
+    it 'returns 401 when unauthorized' do
       get '/api/v1/me/event_applications'
       expect(response.status).to eq(401)
     end
@@ -88,22 +87,6 @@ RSpec.describe "Api::V1::Me::EventApplications", type: :request do
       ids = body.map { |h| h['id'] }
 
       expect(ids).not_to include(other_application.id)
-    end
-
-    it "return 401 when X-UserId is not existed" do
-      get '/api/v1/me/event_applications', headers: { 'X-User-Id' => '99999' }
-      expect(response.status).to eq(401)
-
-      body = JSON.parse(response.body)
-      expect(body['error']).to eq('Unauthorized')
-    end
-
-    it "return 401 when X-User-Id is invalid format" do
-      get '/api/v1/me/event_applications', headers: { 'X-User-Id' => 'abc' }
-      expect(response.status).to eq(401)
-
-      body = JSON.parse(response.body)
-      expect(body['error']).to eq('Unauthorized')
     end
   end
 end

@@ -13,7 +13,10 @@ services:
     command: bash -lc "bin/rails db:prepare && bin/rails s -b 0.0.0.0 -p 3000"
     environment:
       RAILS_ENV: development
-      DATABASE_URL: postgres://postgres:postgres@db:5432/event_app_api_development
+      DB_HOST: db
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DEVISE_JWT_SECRET_KEY: dev-only-secret-key-do-not-use-in-production
     ports:
       - "3000:3000"
     depends_on:
