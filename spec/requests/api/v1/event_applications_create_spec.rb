@@ -76,10 +76,10 @@ RSpec.describe "Api::V1::EventApplications", type: :request do
           )
         end
 
-        it "return 201 and reactivate the canceled application" do
+        it "return 200 and reactivate the canceled application" do
           post "/api/v1/events/#{event_1.id}/event_applications", headers: headers
 
-          expect(response.status).to eq(201)
+          expect(response.status).to eq(200)
 
           body = JSON.parse(response.body)
 
